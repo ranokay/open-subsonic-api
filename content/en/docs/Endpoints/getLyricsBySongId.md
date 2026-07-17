@@ -452,6 +452,43 @@ Does not exist.
 {{< /tab >}}
 {{< /tabpane >}}
 
+#### Version 3 (explicit line ends)
+
+Version 3 adds optional `end` timing to `line` entries in both the default and `enhanced=true` responses. No new query parameter is required.
+
+{{< tabpane persist=false >}}
+{{< tab header="**Example**:" disabled=true />}}
+{{< tab header="OpenSubsonic JSON" lang="json">}}
+{
+  "structuredLyrics": [
+    {
+      "lang": "eng",
+      "synced": true,
+      "line": [
+        { "start": 0, "end": 1800, "value": "An explicit gap follows" },
+        { "start": 2000, "end": 3500, "value": "This line overlaps the next" },
+        { "start": 3200, "end": 3200, "value": "Instantaneous marker" },
+        { "start": 5000, "end": 6400, "value": "The final line has an explicit end" }
+      ]
+    }
+  ]
+}
+{{< /tab >}}
+{{< tab header="OpenSubsonic XML" lang="xml">}}
+<lyricsList>
+  <structuredLyrics lang="eng" synced="true">
+    <line start="0" end="1800">An explicit gap follows</line>
+    <line start="2000" end="3500">This line overlaps the next</line>
+    <line start="3200" end="3200">Instantaneous marker</line>
+    <line start="5000" end="6400">The final line has an explicit end</line>
+  </structuredLyrics>
+</lyricsList>
+{{< /tab >}}
+{{< tab header="Subsonic"  >}}
+Does not exist.
+{{< /tab >}}
+{{< /tabpane >}}
+
 ### Response fields
 
 | Field        | Type                          | Req.    | OpenS.  | Details                   |
@@ -461,11 +498,11 @@ Does not exist.
 ### Implementation notes
 
 {{< alert color="warning" title="Backward compatibility" >}}
-Without `enhanced=true`, the response is identical to version 1:
+Without `enhanced=true`, version 2 enhanced fields remain absent. A server advertising version 3 may still include optional `line.end` values:
 
 - Only `kind="main"` entries are returned (the `kind` field itself is omitted)
 - No `cueLine` arrays are included
-- The existing `line` array is always present and unchanged
+- The existing `line` array is always present; individual lines may include version 3 `end` timing
 - `cueLine` is a **parallel** structure, not a replacement for `line`
 
 Servers that don't support TTML or word-level timing simply never include these fields. Clients that don't support karaoke display simply ignore them.

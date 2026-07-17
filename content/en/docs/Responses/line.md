@@ -12,21 +12,25 @@ description: >
 {{< tab header="OpenSubsonic JSON" lang="json">}}
 {
   "start": 0,
+  "end": 1800,
   "value": "It's bugging me"
 }
 {{< /tab >}}
 {{< tab header="OpenSubsonic XML" lang="xml">}}
-<line start="0">It's bugging me</line>
+<line start="0" end="1800">It's bugging me</line>
 {{< /tab >}}
 {{< tab header="Subsonic"  >}}
 Does not exist.
 {{< /tab >}}
 {{< /tabpane >}}
 
-| Field   | Type     | Req.    | OpenS.  | Details                                                                                                                                                 |
-| ------- | -------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value` | `string` | **Yes** | **Yes** | The actual text of this line                                                                                                                            |
-| `start` | `number` | No      | **Yes** | The start time of the lyrics, relative to the start time of the track, in milliseconds. If this is not part of synced lyrics, start **must** be omitted |
+| Field   | Type     | Req.    | OpenS.  | Details                                                                                                                                                                                                                                        |
+| ------- | -------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value` | `string` | **Yes** | **Yes** | The actual text of this line                                                                                                                                                                                                                   |
+| `start` | `number` | No      | **Yes** | The start time of the lyrics, relative to the start time of the track, in milliseconds. If this is not part of synced lyrics, `start` **must** be omitted                                                                                       |
+| `end`   | `number` | No      | **Yes** | The end time of the lyrics on the same timeline as `start`, in milliseconds. When present, `start` **must** also be present and `end` **must** be greater than or equal to `start`. Added in [`songLyrics`](../../extensions/songlyrics) version 3 |
+
+`end` is optional independently for each line. Its omission means that the end is unknown; clients **must not** assume the line lasts until the next line starts. Gaps and overlapping lines are valid, as is `end == start` for an instantaneous marker. Unsynced lyrics **must** omit both `start` and `end`.
 
 {{< alert color="warning" title="OpenSubsonic" >}}
 This is a new OpenSubsonic response type.

@@ -279,6 +279,26 @@ Does not exist.
 {{< /tab >}}
 {{< /tabpane >}}
 
+### Version 3 (explicit line ends)
+
+Version 3 adds optional `end` timing to each [`line`](../line). It is available in both the default and `enhanced=true` response shapes. The value is exact source timing when known; it is not inferred from the next line.
+
+`offset` applies to both `line.start` and `line.end`. For example, an `offset` of `-100` places a line with `start: 2000` and `end: 3500` at 2100 ms through 3600 ms on the playback timeline.
+
+```json
+{
+  "lang": "eng",
+  "offset": -100,
+  "synced": true,
+  "line": [
+    { "start": 0, "end": 1800, "value": "An explicit gap follows" },
+    { "start": 2000, "end": 3500, "value": "This line overlaps the next" },
+    { "start": 3200, "end": 3200, "value": "Instantaneous marker" },
+    { "start": 5000, "value": "Unknown end" }
+  ]
+}
+```
+
 ### Fields
 
 | Field           | Type                                 | Req.    | OpenS.  | Details                                                                                                                                                                                                                                                                                                                                         |
@@ -288,7 +308,7 @@ Does not exist.
 | `line`          | Array of [`line`](../line)           | **Yes** | **Yes** | The actual lyrics. Ordered by start time (synced) or appearance order (unsynced)                                                                                                                                                                                                                                                                |
 | `displayArtist` | `string`                             | No      | **Yes** | The artist name to display. This could be the localized name, or any other value                                                                                                                                                                                                                                                                |
 | `displayTitle`  | `string`                             | No      | **Yes** | The title to display. This could be the song title (localized), or any other value                                                                                                                                                                                                                                                              |
-| `offset`        | `number`                             | No      | **Yes** | The offset to apply to all lyrics, in milliseconds. Positive means lyrics appear sooner, negative means later. If not included, the offset **must** be assumed to be 0                                                                                                                                                                         |
+| `offset`        | `number`                             | No      | **Yes** | The offset to apply to all lyric timing, in milliseconds, including both `line.start` and `line.end`. Positive means lyrics appear sooner, negative means later. If not included, the offset **must** be assumed to be 0                                                                                                                          |
 | `kind`          | `string`                             | No      | **Yes** | The primary lyric-layer classification for this `structuredLyrics` entry. One of: `main` (primary vocals for this entry, default if omitted), `translation` (a translation of another lyric layer into another language), `pronunciation` (a phonetic/romanized rendering, e.g. romaji for Japanese, pinyin for Chinese). Tracks are independent across `kind` values; clients should not assume 1:1 line or cue alignment between entries. Only returned when `enhanced=true`. Added in [`songLyrics`](../../extensions/songlyrics) version 2 |
 | `agents`        | Array of [`agent`](../agent)         | No      | **Yes** | Reusable per-track attribution metadata for `cueLine` entries. When present, **must** contain at least one entry, and each `agents[].id` **must** be unique within this `structuredLyrics` entry. `agents` are optional for simple unattributed single-layer lyrics. When a `structuredLyrics` entry represents multiple vocal agents/layers, it **must** include `agents`; a single-agent attributed/default entry may also include `agents`, and if it does, exactly one agent **must** use `role: "main"`. `agents` should not be emitted without `cueLine` data |
 | `cueLine`       | Array of [`cueLine`](../cueline)     | No      | **Yes** | Word/syllable-level timing data. Each cueLine corresponds to a `line` by its `index` field. Every cueLine **must** include `value`, and every nested cue **must** include `byteStart` / `byteEnd` offsets into that exact string. If `agents` is present, every cueLine in the entry **must** include `agentId`; if `agents` is absent, cueLines **must not** include `agentId`. Only returned when `enhanced=true` and `synced` is `true`. Added in [`songLyrics`](../../extensions/songlyrics) version 2 |

@@ -43,3 +43,19 @@ Servers that support Version 2 should advertise `songLyrics` versions `[1, 2]` v
 This extension requires the following endpoints:
 
 - [`getLyricsBySongId`](../../endpoints/getlyricsbysongid): Fetch structured song lyrics by id (with optional `enhanced` parameter)
+
+## Version 3
+
+Explicit line end timing.
+
+Adds the optional `end` field to [`line`](../../responses/line). It uses the same track-relative millisecond timeline as `start` and is available in both the default and `enhanced=true` response shapes. No new request parameter is required.
+
+When `end` is present, `start` **must** also be present and `end` **must** be greater than or equal to `start`. A zero-duration line (`end == start`) is a valid instantaneous marker. Lines may overlap or leave gaps, and `end` is not required to equal the next line's `start`. Omitting `end` means that the end is unknown, not that the line implicitly lasts until the next line. Unsynced lyrics **must** omit both fields.
+
+The optional [`structuredLyrics.offset`](../../responses/structuredlyrics) applies equally to line `start` and `end` when clients place the lyrics on the playback timeline.
+
+Servers that support Version 3 should advertise `songLyrics` versions `[1, 2, 3]` via [`getOpenSubsonicExtensions`](../../endpoints/getopensubsonicextensions).
+
+This extension requires the following endpoint:
+
+- [`getLyricsBySongId`](../../endpoints/getlyricsbysongid): Fetch structured song lyrics by id
