@@ -37,7 +37,7 @@ When agent attribution is present, the reusable agent metadata lives once in `st
 
 Each cue includes `byteStart` / `byteEnd`, defined as 0-based inclusive offsets into the UTF-8 encoding of the final `cueLine.value`, with no normalization step. Accordingly, each `cueLine` that contains cues must also include `value`. When multiple agent cueLines share one parent line index, each `cueLine.value` is the renderable text for that agent/layer, not necessarily the parent line's combined text.
 
-`line.end` uses the same track-relative millisecond timeline as `line.start`. When present, `start` **must** also be present and `end` **must** be greater than or equal to `start`. A zero-duration line (`end == start`) is a valid instantaneous marker. Lines may overlap or leave gaps, and omission means the exact end is unknown; clients **must not** infer it from the next line. The optional `structuredLyrics.offset` applies equally to both timestamps. Unsynced lyrics **must** omit both fields.
+`line.end` uses the same track-relative millisecond timeline as `line.start`. When present, `start` **must** also be present and `end` **must** be greater than or equal to `start`. A zero-duration line (`end == start`) is a valid instantaneous marker. Lines may overlap or leave gaps. When `end` is omitted, clients may infer a fallback end, for example from the next line's start, but should not treat it as exact source timing. The optional `structuredLyrics.offset` applies equally to both timestamps. Unsynced lyrics **must** omit both fields.
 
 All new fields are gated behind `enhanced=true` — without it, the response is identical to version 1.
 
