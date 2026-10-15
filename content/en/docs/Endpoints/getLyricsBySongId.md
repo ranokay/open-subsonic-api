@@ -278,7 +278,7 @@ Does not exist.
 
 ##### Explicit line-end timing
 
-In a version 2 enhanced response, `line.end` uses the same track-relative millisecond timeline as `line.start`. It is exact timing when known and is never inferred from the next line. The field may be present independently per line, including on the final line. Gaps, overlaps, and zero-duration markers are valid:
+In a version 2 enhanced response, `line.end` uses the same track-relative millisecond timeline as `line.start`. Servers send it only when the source provides an exact end; they do not derive it from the next line's start. The field may be present independently per line, including on the final line. Gaps, overlaps, and zero-duration markers are valid:
 
 {{< tabpane persist=false >}}
 {{< tab header="**Example**:" disabled=true />}}

@@ -126,7 +126,7 @@ Does not exist.
 
 #### Explicit line-end behavior
 
-`line.end` is exact timing when known; it is not inferred from the next line. It may be present independently per line, including on the final line. Gaps, overlaps, and zero-duration markers are all valid:
+`line.end` carries exact source timing. Servers send it only when the source provides an exact end and do not derive it from the next line's start. It may be present independently per line, including on the final line. Gaps, overlaps, and zero-duration markers are all valid:
 
 {{< tabpane persist=false >}}
 {{< tab header="**Example**:" disabled=true />}}
