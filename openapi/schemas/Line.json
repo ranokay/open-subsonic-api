@@ -16,7 +16,7 @@
         },
         "end": {
             "type": "number",
-            "description": "The optional exact end time of the lyrics on the same track-relative millisecond timeline as start. It is only returned for songLyrics version 2 enhanced responses. When present, start must also be present and end must be greater than or equal to start. If this is not part of synced lyrics, end must be omitted"
+            "description": "The optional exact end time of the lyrics on the same track-relative millisecond timeline as start. It is only returned for songLyrics version 2 enhanced responses. When present, start must also be present and end must be greater than or equal to start. Servers must not derive end from the next line's start. If this is not part of synced lyrics, end must be omitted"
         }
     },
     "required": [
